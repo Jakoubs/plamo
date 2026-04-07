@@ -6,3 +6,6 @@ A system to monitor and whater your plants 🌱
 ![software](assets/software_diagramm.jpg)
 ### Datenbank
 ![datenbank](assets/datenbank.drawio.png)
+### Messung
+![messung](assets/swimlaneMessung.drawio.png)
+![water](assets/swimlaneWhater.drawio.png)
