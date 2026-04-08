@@ -9,7 +9,7 @@ import ResetPasswordView from "@/stages/ResetPasswordView.vue";
 import EnterCode from "@/stages/EnterCode.vue";
 import 'element-plus/dist/index.css' // Keep the default styles
 const routes = [
-    { path: '/', component: HomeView },
+    { path: '/', component: LoginView },
     { path: '/login', component: LoginView},
     { path: '/login', component: LoginView},
     { path: '/data', component: DataView},
