@@ -1,27 +1,44 @@
 <script setup lang="ts">
 // Hier muss kein Router mehr importiert oder erstellt werden!
-import {ElButton, ElAvatar} from "element-plus";
+import {ElButton, ElAvatar, ElDialog} from "element-plus";
 import Logo_home from "@/small_components/Logo_home.vue";
+import { useRouter } from "vue-router";
+import {ref} from "vue";
 const circleUrl = '/images/avatar.jpg';
+const dialogVisible = ref(false);
+function handleClick() {
+  dialogVisible.value = true;
+}
+const router = useRouter();
+function logout(){
+  dialogVisible.value = false
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="container">
     <Logo_home />
-    <el-avatar class="avatar" :size="50" :src="circleUrl" />
+    <el-avatar @click="handleClick()" class="avatar" :size="50" :src="circleUrl" />
+    <el-dialog
+        v-model="dialogVisible"
+        title="Account"
+        width="500"
+    >
+      <span>here could be some Account settings</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="logout()">
+            logout
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
   <main>
     <RouterView />
   </main>
-  <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
-  <nav>
-    <RouterLink to="/">Go to Home</RouterLink> |
-    <RouterLink to="/about">Go to About</RouterLink> |
-    <RouterLink to="/plants">Go to Plants</RouterLink> |
-    <RouterLink to="/data">Go to Data</RouterLink> |
-    <RouterLink to="/enterCode">Go to reset Code</RouterLink> |
-    <RouterLink to="/login">Go to Login</RouterLink>
-  </nav>
 </template>
 <style scoped>
 .container {
@@ -36,5 +53,6 @@ const circleUrl = '/images/avatar.jpg';
 .avatar {
   position: absolute;
   right: 10px;
+  cursor: pointer;
 }
 </style>

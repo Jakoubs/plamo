@@ -30,7 +30,7 @@
           <template #prepend>Password</template>
           </el-input>
       </div>
-      <el-button class="login-button" type="primary">Login</el-button>
+      <el-button @click="$router.push('/plants')" class="login-button" type="primary">Login</el-button>
       <a href="resetPassword">reset password</a>
     </div>
   </form>
