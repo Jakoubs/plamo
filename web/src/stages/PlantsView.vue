@@ -25,7 +25,7 @@ const fallbackPlantSrc = '/images/fallbackPlant.png';
           :xs="24" :sm="12" :md="8" :lg="8"
           class="grid-col"
       >
-        <el-card shadow="hover" class="plant-card">
+        <el-card shadow="hover" class="plant-card" @click="$router.push(`/data`)">
           <template #header>
             <div class="card-header">
               <span class="plant-name">{{ plant.name }}</span>
@@ -65,6 +65,7 @@ const fallbackPlantSrc = '/images/fallbackPlant.png';
 
 .plant-card {
   border-radius: 12px;
+  cursor: pointer;
 
   .card-header {
     display: flex;
