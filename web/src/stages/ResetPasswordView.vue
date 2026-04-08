@@ -4,6 +4,8 @@
   import {routes} from "vue-router/auto-routes";
   import {RouterLink} from "vue-router";
   import {ElInput, ElButton} from "element-plus";
+  import {useRouter} from "vue-router";
+  const router = useRouter();
 
   const mail = ref('')
   const showError = ref(false);
@@ -11,7 +13,7 @@
     if(!mail.value.includes('@')){
       showError.value = true;
     } else {
-
+      router.push('/enterCode')
     }
   }
 </script>
@@ -24,10 +26,10 @@
             class="username-input"
             v-model="mail"
             clearable>
-          <template #prepend>Username</template>
+          <template #prepend>e-mail</template>
         </el-input>
       </div>
-      <el-button class="enter-button" type="primary" @click="enterMail()">enter</el-button>
+      <el-button class="enter-button" type="primary" @click="enterMail()">send code</el-button>
       <p>Enter your email to reset your password</p>
       <p v-if="showError" class="error">Email format is not valid</p>
     </div>
