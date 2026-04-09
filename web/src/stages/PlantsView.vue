@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ElCard, ElRow, ElCol, ElStatistic } from "element-plus";
-
+import {ElIcon, ElCard, ElRow, ElCol, ElStatistic } from "element-plus";
+import {Plus} from "@element-plus/icons-vue";
 const usrPlants = {
   plant1: { name: 'Fiddle Leaf', type: 'Tree', imgSrc: '/images/FiddleLeaf.png', sensorData: { temperature: 20, humidity: 50, moisture: 32 } },
   plant2: { name: 'Snake Plant', type: 'Succulent', imgSrc: '/images/Spider.png', sensorData: { temperature: 25, humidity: 60, moisture: 28 } },
@@ -41,6 +41,22 @@ const fallbackPlantSrc = '/images/fallbackPlant.png';
           </div>
         </el-card>
       </el-col>
+      <div style="margin: 10px">
+      <el-card style="background-color: white" shadow="hover" class="plant-card" @click="$router.push(`/addPlant`)">
+        <template #header>
+          <div class="card-header">
+            <span class="plant-name">new Plant</span>
+          </div>
+        </template>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+          <el-icon class="el-icon--right">
+            <Plus></Plus>
+          </el-icon>
+          <img style="width: 50px" :src="fallbackPlantSrc" alt="Plant Image" class="/images/plant-image" />
+        </div>
+
+      </el-card>
+      </div>
     </el-row>
   </div>
 </template>

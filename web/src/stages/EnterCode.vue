@@ -29,7 +29,10 @@
     <el-input @input="(val) => handleInput(val,input2Ref, input4Ref)" ref="input3Ref" maxlength="1" v-model="num3" class="input-number"/>
     <el-input @input="(val) => handleInput(val,input3Ref, null)" ref="input4Ref" maxlength="1" v-model="num4" class="input-number" />
   </div>
+    <div>
     <el-button type="primary" @click="$router.push('/plants')">enter</el-button>
+    <el-button>resend code</el-button>
+    </div>
   </div>
 </template>
 

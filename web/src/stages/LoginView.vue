@@ -31,7 +31,11 @@
           </el-input>
       </div>
       <el-button @click="$router.push('/plants')" class="login-button" type="primary">Login</el-button>
-      <a class="linkToReset" @click="$router.push('/resetPassword')">reset password</a>
+      <div style="display: flex; gap: 7px; justify-content: center">
+        <a class="linkToReset" @click="$router.push('/resetPassword')">reset password</a>
+        <p style="color: #409EFF; margin: 0">|</p>
+        <a @click="$router.push('/register')" class="linkToReset">register</a>
+      </div>
     </div>
   </form>
 </template>

@@ -68,8 +68,12 @@ for (let i = 1; i < headers.length; i++) {
   ];
   seperateSensorData.push(chartData);
 }
+let lastSensorData =[]
+for(let i = 0; i < seperateSensorData.length; i++){
+  lastSensorData.push([seperateSensorData[i][0][1],seperateSensorData[i][seperateSensorData[i].length-1][1],seperateSensorData[i][seperateSensorData[i].length-1][0]])
+}
+const windowWidth = window.innerWidth;
 </script>
-
 <template>
     <div class="dashboard-wrapper">
       <el-card>
@@ -78,11 +82,69 @@ for (let i = 1; i < headers.length; i++) {
         </el-icon>
         <div class="page-header">
           <h1>{{ plant3.name }}</h1>
-          <img style="width: 320px" :src="plant3.imgSrc" alt="Plant Image" class="plant-image" />
         </div>
-        <div class="stats-grid">
-          <GChart v-for="sensor in seperateSensorData" type="LineChart" :data="sensor" :options="{title: sensor[0][1].toString(), curveType: 'function', legend: { position: 'bottom' }}"/>
+        <div style="display: flex; width: 100%; gap: 20px;">
+          <div class="stats-grid">
+            <GChart
+                v-for="sensor in seperateSensorData"
+                :key="sensor[0][1]"
+                type="LineChart"
+                :data="sensor"
+                :options="{
+                  title: sensor[0][1].toString(),
+                  curveType: 'function',
+                  legend: { position: 'bottom' },
+                  width: windowWidth-1050, // Wichtig für die Füllung
+                  height: 200    // Optional: Feste Höhe pro Chart
+                }"
+            />
+          </div>
+          <div class="stats-grid">
+            <GChart
+                v-for="sensor in seperateSensorData"
+                :key="sensor[0][1]"
+                type="LineChart"
+                :data="sensor"
+                :options="{
+                  title: sensor[0][1].toString(),
+                  curveType: 'function',
+                  legend: { position: 'bottom' },
+                  width: windowWidth-1050, // Wichtig für die Füllung
+                  height: 200    // Optional: Feste Höhe pro Chart
+                }"
+            />
+          </div>
+          <el-card style="display: flex; flex-direction: column; align-content: center;">
+            <template #header>
+              <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                <h3 style="margin: 0">current vitals</h3>
+                <p>measured at: {{lastSensorData[0][2]}}</p>
+              </div>
+            </template>
+            <img style="width: 320px; height: 180px" :src="plant3.imgSrc" alt="Plant Image" class="plant-image" />
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div style="display: flex; flex-direction: column;" v-for="data in lastSensorData" class="stats-grid">
+                <div style="display: flex; flex-direction: column; align-content: center;">
+                  <div class="circle">
+                    <h1 style="margin: 0;">{{data[1]}}</h1>
+                  </div>
+                  <p style="align-self: center">{{data[0]}}</p>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div style="display: flex; flex-direction: column;" v-for="data in lastSensorData" class="stats-grid">
+                <div style="display: flex; flex-direction: column; align-content: center;">
+                  <div class="circle">
+                    <h1 style="margin: 0;">{{data[1]}}</h1>
+                  </div>
+                  <p style="align-self: center">{{data[0]}}</p>
+                </div>
+              </div>
+            </div>
+          </el-card>
         </div>
+
       </el-card>
     </div>
   </template>
@@ -91,6 +153,18 @@ for (let i = 1; i < headers.length; i++) {
     .page-header {
       display: flex;
       margin-top: 20px;
+    }
+    .circle {
+      clip-path: circle(50px);
+      background-color: #629584;
+      color: white;
+      text-align: center;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .dashboard-wrapper {
       padding: 20px;
@@ -123,6 +197,7 @@ for (let i = 1; i < headers.length; i++) {
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         text-align: center;
+        width: 100%;
 
         // Scss nesting to style Element's internal classes
         :deep(.el-statistic__content) {
