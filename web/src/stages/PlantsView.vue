@@ -1,14 +1,29 @@
 <script setup lang="ts">
 import {ElIcon, ElCard, ElRow, ElCol, ElStatistic } from "element-plus";
 import {Plus} from "@element-plus/icons-vue";
-const usrPlants = {
-  plant1: { name: 'Fiddle Leaf', type: 'Tree', imgSrc: '/images/FiddleLeaf.png', sensorData: { temperature: 20, humidity: 50, moisture: 32 } },
-  plant2: { name: 'Snake Plant', type: 'Succulent', imgSrc: '/images/Spider.png', sensorData: { temperature: 25, humidity: 60, moisture: 28 } },
-  plant3: { name: 'Monstera', type: 'Climber',imgSrc: '/images/Monstera.png', sensorData: { temperature: 22, humidity: 45, moisture: 35 } },
-  plant4: { name: 'Peace Lily', type: 'Flower',imgSrc: '/images/PeaceLily.png', sensorData: { temperature: 28, humidity: 55, moisture: 22 } },
-  plant5: { name: 'Pothos', type: 'Vine', imgSrc: '/images/Photos.png', sensorData: { temperature: 23, humidity: 48, moisture: 37 } },
-  plant6: { name: 'Spider Plant', type: 'Herb', imgSrc: '/images/SpiderPlant.png', sensorData: { temperature: 26, humidity: 52, moisture: 25 } }
+import {ref} from "vue";
+const usrPlants = ref({
+})
+
+async function getUserPlantData(){
+  const token = localStorage.getItem('token')
+  if(token) {
+    fetch('http://localhost:8080/api/plantData', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          } else {
+            usrPlants.value = response.json();
+          }
+    })
+  }
 }
+await getUserPlantData();
 const fallbackPlantSrc = '/images/fallbackPlant.png';
 </script>
 

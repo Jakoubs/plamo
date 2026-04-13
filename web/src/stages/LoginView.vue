@@ -5,6 +5,23 @@
 
   const pw = ref();
   const username = ref();
+  const login_path = ref('/login');
+
+  const login_result =ref("");
+
+
+  async function login(){
+    const req = await  fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: username.value, password: pw.value})
+    })
+    login_result.value = await req.text();
+    localStorage.setItem('token', login_result.value);
+  }
+
 </script>
 
 <template>
@@ -30,7 +47,8 @@
           <template #prepend>Password</template>
           </el-input>
       </div>
-      <el-button @click="$router.push('/plants')" class="login-button" type="primary">Login</el-button>
+      <el-button @click="login()" class="login-button" type="primary">Login</el-button>
+      <pre>{{login_result}}</pre>
       <div style="display: flex; gap: 7px; justify-content: center">
         <a class="linkToReset" @click="$router.push('/resetPassword')">reset password</a>
         <p style="color: #409EFF; margin: 0">|</p>

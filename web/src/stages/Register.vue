@@ -1,16 +1,19 @@
 <template>
+  <div class="register-container">
+    <el-card>
+      <template #header>Create a new account</template>
   <el-form :model="form" label-width="auto" style="max-width: 600px">
-    <el-form-item label="Username">
-      <el-input v-model="form.name" />
+    <el-form-item   label="Username">
+      <el-input placeholder="enter a username" v-model="form.name" />
     </el-form-item>
 
-    <el-form-item label="Password">
+    <el-form-item label="password">
       <div style="display: flex; flex-direction: column; gap: 5px; width: 100%;">
         <el-input v-model="form.password" show-password placeholder="enter a Password" type="password" />
         <el-input
             v-model="form.passwordRepeat"
             show-password
-            placeholder="repeat your Password"
+            placeholder="repeat your password"
             type="password"
             :class="passwordsDoNotMatch ? 'is-invalid' : 'test'"
         />
@@ -42,14 +45,20 @@
 
     <el-form-item>
       <el-button type="primary" @click="onSubmit" :disabled="passwordsDoNotMatch">Register</el-button>
+      <el-button @click="$router.push('/')">
+        Cancel
+      <el-icon size="20px"><Close></Close></el-icon>
+      </el-button>
     </el-form-item>
   </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
-import { ElIcon, ElButton, ElUpload, ElForm, ElFormItem, ElInput, ElMessage } from 'element-plus'
-import { Plus, Delete } from '@element-plus/icons-vue'
+import {ElCard, ElIcon, ElButton, ElUpload, ElForm, ElFormItem, ElInput, ElMessage } from 'element-plus'
+import {Close, Plus, Delete } from '@element-plus/icons-vue'
 import type { UploadProps, UploadFile } from 'element-plus'
 
 const imageUrl = ref('')
@@ -163,5 +172,11 @@ const onSubmit = () => {
 
 .test :deep(.el-input__wrapper) {
   box-shadow: 0 0 0 1px #409eff inset !important;
+}
+.register-container {
+  display: flex;
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
 }
 </style>
