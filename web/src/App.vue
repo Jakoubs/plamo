@@ -12,6 +12,7 @@ function handleClick() {
 const router = useRouter();
 function logout(){
   dialogVisible.value = false
+  localStorage.removeItem('token');
   router.push('/login')
 }
 </script>
