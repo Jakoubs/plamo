@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import me.jakobsteiner.plamo.requests.AuthRequest;
 import me.jakobsteiner.plamo.tables.User;
 import me.jakobsteiner.plamo.tables.UserRepository;
+import me.jakobsteiner.plamo.tables.Usr_Pm_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ public class Controller {
 
     @Autowired
      private UserRepository userRepository;
+    @Autowired
+    private Usr_Pm_Repository usr_pm_repository;
+
 
     @GetMapping("api/addUser")
     public String addUser(@RequestParam(defaultValue = "") String name , @RequestParam(defaultValue = "") String email, @RequestParam(defaultValue = "") String password) {
@@ -60,6 +64,7 @@ public class Controller {
                 "\"plant5\": { \"name\": \"Pothos\", \"type\": \"Vine\", \"imgSrc\": \"/images/Photos.png\", \"sensorData\": { \"temperature\": 23, \"humidity\": 48, \"moisture\": 37 } }," +
                 "\"plant6\": { \"name\": \"Spider Plant\", \"type\": \"Herb\", \"imgSrc\": \"/images/SpiderPlant.png\", \"sensorData\": { \"temperature\": 26, \"humidity\": 52, \"moisture\": 25 } }" +
                 "}";*/
-        return dataService.getPlantSreenJSON(claims.get("userId", Integer.class));
+        JacksonProperties.Json data = dataService.getPlantSreenJSON(claims.get("userId", Integer.class), usr_pm_repository);
+        return data;
     }
 }
