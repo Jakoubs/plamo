@@ -1,32 +1,44 @@
 <script setup lang="ts">
-import {ElIcon, ElCard, ElRow, ElCol, ElStatistic } from "element-plus";
-import {Plus} from "@element-plus/icons-vue";
-import {ref} from "vue";
-const usrPlants = ref({
-})
+import { ElIcon, ElCard, ElRow, ElCol, ElStatistic, ElTag } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
+import { ref, onMounted } from "vue";
+const usrPlants = ref({});
+const fallbackPlantSrc = '/images/fallbackPlant.png';
 
-async function getUserPlantData(){
-  const token = localStorage.getItem('token')
-  if(token) {
-    fetch('http://localhost:8080/api/plantData', {
-      method: 'GET',
+async function getUserPlantData() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/api/plantData', {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
-    })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          } else {
-            usrPlants.value = response.json();
-          }
-    })
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    if(data.length === 0){
+      window.location.href = '/login';
+      return
+    }
+    console.log("data",data, data.length)
+    usrPlants.value = data;
+  } catch (error) {
+    console.error("Fehler beim Laden:", error);
   }
 }
-await getUserPlantData();
-const fallbackPlantSrc = '/images/fallbackPlant.png';
-</script>
 
+// Rufe die Daten auf, wenn die Komponente geladen wird
+onMounted(() => {
+  getUserPlantData();
+});
+</script>
 <template>
   <div class="dashboard-wrapper">
     <div class="page-header">
