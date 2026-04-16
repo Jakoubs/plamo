@@ -1,4 +1,5 @@
 package me.jakobsteiner.plamo;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,7 +24,11 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, KEY)
                 .compact();
     }
-    public static int validateToken(String token) {
-        return 0;
+    public static Claims validateToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

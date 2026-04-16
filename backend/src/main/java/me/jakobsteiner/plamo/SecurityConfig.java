@@ -26,7 +26,7 @@ class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
                         // Permit these paths without any login
-                        .requestMatchers("/api/plantData", "/addUser","/hello", "/login", "/api/login").permitAll()
+                        .requestMatchers("/api/plantData", "/plantData" , "/addUser","/hello", "/login", "/api/login").permitAll()
                         // Everything else still requires authentication
                         .anyRequest().authenticated()
                 )
