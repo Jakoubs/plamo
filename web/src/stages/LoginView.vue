@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {ref} from "vue";
-  import {ElInput, ElButton, ElIcon} from "element-plus";
+  import {ElInput, ElButton, ElIcon, resultProps} from "element-plus";
   import {User} from "@element-plus/icons-vue";
 
   const pw = ref();
@@ -18,8 +18,22 @@
       },
       body: JSON.stringify({email: username.value, password: pw.value})
     })
-    login_result.value = await req.text();
+
+    pw.value = "";
+
+    console.log(req, !req.ok)
+    if(!req.ok){
+      login_result.value = "login failed! try again";
+      return;
+    }
+
+    const token = await req.text();
+    if(token.length != 0) {
+    login_result.value = token;
     localStorage.setItem('token', login_result.value);
+    window.location.href = '/plants';
+    login_result.value = "";
+    }
   }
 
 </script>
@@ -33,6 +47,8 @@
       <div class="username">
         <el-input
             v-model="username"
+            type="text"
+            autocomplete="username"
             clearable>
         <template #prepend>Username</template>
         </el-input>
@@ -48,7 +64,6 @@
           </el-input>
       </div>
       <el-button @click="login()" class="login-button" type="primary">Login</el-button>
-      <pre>{{login_result}}</pre>
       <div style="display: flex; gap: 7px; justify-content: center">
         <a class="linkToReset" @click="$router.push('/resetPassword')">reset password</a>
         <p style="color: #409EFF; margin: 0">|</p>
@@ -56,8 +71,14 @@
       </div>
     </div>
   </form>
+  <p class="error">{{login_result}}</p>
 </template>
 <style scoped>
+.error{
+  color: red;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
 .user-icon{
   font-size: 80px;
 }
