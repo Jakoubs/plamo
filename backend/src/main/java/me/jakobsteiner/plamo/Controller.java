@@ -6,6 +6,8 @@ import me.jakobsteiner.plamo.tables.User;
 import me.jakobsteiner.plamo.tables.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,30 +31,35 @@ public class Controller {
     }
 
     @PostMapping("/api/login")
-    public String login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity login(@RequestBody AuthRequest authRequest) {
         String entered_email = authRequest.getEmail();
         String entered_pw = authRequest.getPassword();
         User user = userRepository.findByEmail(entered_email);
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed!");
+        }
         String hashed_pw = user.getPassword();
 
         if (passwordService.matches(entered_pw, hashed_pw)) {
-            return JwtUtil.generateToken(user.getId(), user.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).body(JwtUtil.generateToken(user.getId(), user.getEmail()));
         } else {
-            return "Login failed!";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed!");
         }
     }
 
     @PostMapping("/api/plantData")
-    public JacksonProperties.Json plantData(@RequestHeader String token) {
+    public JacksonProperties.Json plantData(@RequestHeader String Authorization) {
+        if(Authorization.equals("") || !Authorization.contains("Bearer")) return new JacksonProperties.Json();
+        String token = Authorization.replace("Bearer ", "");
         io.jsonwebtoken.Claims claims = JwtUtil.validateToken(token);
-        String data = "{" +
+        /*String data = "{" +
                 "\"plant1\": { \"name\": \"Fiddle Leaf\", \"type\": \"Tree\", \"imgSrc\": \"/images/FiddleLeaf.png\", \"sensorData\": { \"temperature\": 20, \"humidity\": 50, \"moisture\": 32 } }," +
                 "\"plant2\": { \"name\": \"Snake Plant\", \"type\": \"Succulent\", \"imgSrc\": \"/images/Spider.png\", \"sensorData\": { \"temperature\": 25, \"humidity\": 60, \"moisture\": 28 } }," +
                 "\"plant3\": { \"name\": \"Monstera\", \"type\": \"Climber\", \"imgSrc\": \"/images/Monstera.png\", \"sensorData\": { \"temperature\": 22, \"humidity\": 45, \"moisture\": 35 } }," +
                 "\"plant4\": { \"name\": \"Peace Lily\", \"type\": \"Flower\", \"imgSrc\": \"/images/PeaceLily.png\", \"sensorData\": { \"temperature\": 28, \"humidity\": 55, \"moisture\": 22 } }," +
                 "\"plant5\": { \"name\": \"Pothos\", \"type\": \"Vine\", \"imgSrc\": \"/images/Photos.png\", \"sensorData\": { \"temperature\": 23, \"humidity\": 48, \"moisture\": 37 } }," +
                 "\"plant6\": { \"name\": \"Spider Plant\", \"type\": \"Herb\", \"imgSrc\": \"/images/SpiderPlant.png\", \"sensorData\": { \"temperature\": 26, \"humidity\": 52, \"moisture\": 25 } }" +
-                "}";
+                "}";*/
         return dataService.getPlantSreenJSON(claims.get("userId", Integer.class));
     }
 }
